@@ -10,10 +10,32 @@ door_a = {
     "type": "door",
 }
 
+door_b = {
+    "name": "door b",
+    "type": "door",
+}
+
+door_c = {
+    "name": "door c",
+    "type": "door",
+}
+
 key_a = {
     "name": "key for door a",
     "type": "key",
     "target": door_a,
+}
+
+key_b = {
+    "name": "key for door b",
+    "type": "key",
+    "target": door_b,
+}
+
+key_c = {
+    "name": "key for door c",
+    "type": "key",
+    "target": door_c,
 }
 
 piano = {
@@ -26,21 +48,39 @@ game_room = {
     "type": "room",
 }
 
+bedroom_1 = {
+    "name": "bedroom 1",
+    "type": "room",
+}
+
+queen_bed = {
+    "name": "queen bed",
+    "type": "furniture",
+}
+bedroom_2 = {
+    "name": "bedroom 2",
+    "type": "room",
+}
+
 outside = {
   "name": "outside"
 }
 
-all_rooms = [game_room, outside]
+all_rooms = [game_room, outside, bedroom_1, bedroom_2]
 
-all_doors = [door_a]
+all_doors = [door_a, door_b, door_c]
 
 # define which items/rooms are related
 
 object_relations = {
     "game room": [couch, piano, door_a],
     "piano": [key_a],
-    "outside": [door_a],
-    "door a": [game_room, outside]
+    "bedroom 1": [queen_bed, door_a, door_b, door_c],
+    "queen bed": [key_b],
+    "outside": [],
+    "door a": [game_room, bedroom_1],
+    "door b": [bedroom_1, bedroom_2],
+    "door c": [bedroom_1]
 }
 
 # define game state. Do not directly change this dict. 
@@ -78,16 +118,24 @@ def play_room(room):
         print("Congrats! You escaped the room!")
     else:
         print("You are now in " + room["name"])
-        intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
+        intended_action = input("What would you like to do? Type 'explore' or 'examine' or 'inventory'?").strip()
         if intended_action == "explore":
             explore_room(room)
             play_room(room)
         elif intended_action == "examine":
             examine_item(input("What would you like to examine?").strip())
+        elif intended_action == "inventory":
+            check_inventory()
+            play_room(room)    
         else:
             print("Not sure what you mean. Type 'explore' or 'examine'.")
             play_room(room)
         linebreak()
+
+def check_inventory():
+    output_message = "You check your pockets and you find these keys: "
+    print(output_message)
+    print(game_state['keys_collected'])        
 
 def explore_room(room):
     """
@@ -149,7 +197,7 @@ def examine_item(item_name):
     if(output is None):
         print("The item you requested is not found in the current room.")
     
-    if(next_room and input("Do you want to go to the next room? Ener 'yes' or 'no'").strip() == 'yes'):
+    if(next_room and input("Do you want to go to the next room? Enter 'yes' or 'no'").strip() == 'yes'):
         play_room(next_room)
     else:
         play_room(current_room)
