@@ -57,6 +57,22 @@ queen_bed = {
     "name": "queen bed",
     "type": "furniture",
 }
+
+wardrobe = {
+    "name": "wardrobe",
+    "type": "furniture",
+}
+
+carpet = {
+    "name": "carpet",
+    "type": "furnishing",
+}
+
+floor_lamp = {
+    "name": "floor lamp",
+    "type": "furnishing",
+}
+
 bedroom_2 = {
     "name": "bedroom 2",
     "type": "room",
@@ -75,7 +91,7 @@ all_doors = [door_a, door_b, door_c]
 object_relations = {
     "game room": [couch, piano, door_a],
     "piano": [key_a],
-    "bedroom 1": [queen_bed, door_a, door_b, door_c],
+    "bedroom 1": [queen_bed, wardrobe, carpet, floor_lamp, door_a, door_b, door_c],
     "queen bed": [key_b],
     "outside": [],
     "door a": [game_room, bedroom_1],
@@ -133,9 +149,13 @@ def play_room(room):
         linebreak()
 
 def check_inventory():
-    output_message = "You check your pockets and you find these keys: "
-    print(output_message)
-    print(game_state['keys_collected'])        
+    if len(game_state['keys_collected']) == 0:
+        print("Your pockets are empty!")
+    else:    
+        output_message = "You check your pockets and you find these keys: "
+        print(output_message)
+        for key in game_state['keys_collected']:
+            print(key["name"])        
 
 def explore_room(room):
     """

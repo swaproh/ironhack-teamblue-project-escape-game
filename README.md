@@ -12,7 +12,7 @@ The player must explore rooms and examine items present in rooms , collect keys,
 Rooms Overview:
 
 Game Room - Starting room with items like couch, piano etc.
-Bedroom1 - Contains a queen bed and three doors
+Bedroom1 - Contains a queen bed, wardrobe, carpet, floor lamp three doors
 Bedroom2 - Contains a double bed and a dresser
 Living room - Contains Dining table and it is final room with exit door.
 
