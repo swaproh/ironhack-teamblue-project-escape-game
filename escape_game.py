@@ -1,3 +1,4 @@
+import random
 # define rooms and items
 
 couch = {
@@ -99,6 +100,17 @@ bedroom_2 = {
     "type": "room",
 }
 
+dresser = {
+    "name": "dresser",
+    "type": "furniture",
+}
+
+double_bed = {
+    "name": "dresser",
+    "type": "furniture",
+}
+
+
 outside = {
   "name": "outside"
 }
@@ -113,12 +125,15 @@ object_relations = {
     "game room": [couch, piano, door_a],
     "piano": [key_a],
     "bedroom 1": [queen_bed, wardrobe, carpet, floor_lamp, door_a, door_b, door_c],
+    "bedroom 2": [double_bed, dresser, door_b],
     "living room": [dining_table, door_c, door_d],
     "queen bed": [key_b],
+    "double bed": [key_c],
+    "dresser": [key_d],
     "outside": [],
     "door a": [game_room, bedroom_1],
     "door b": [bedroom_1, bedroom_2],
-    "door c": [bedroom_1, living_room]
+    "door c": [bedroom_1, living_room],
     "door d": [living_room, outside],
 
 }
@@ -241,10 +256,25 @@ def examine_item(item_name):
     if(output is None):
         print("The item you requested is not found in the current room.")
     
-    if(next_room and input("Do you want to go to the next room? Enter 'yes' or 'no'").strip() == 'yes'):
+    if(next_room and input("Do you want to go to the next room?").strip() == 'yes'):
         play_room(next_room)
     else:
         play_room(current_room)
+
+#def riddle(num):
+ #   ques_ans = {'I’m full of words, but I can’t speak. I’m full of knowledge, but I can’t think. What am I ': 'book', 'What has a neck but no head, and a body but no legs?': 'bottle', 
+  #              'What has cities but no houses, forests but no trees, and rivers but no water?': 'map', 'What has a thumb and four fingers but is not alive?': 'glove', 'What has teeth but cannot bite?': 'comb',
+   #             'I’m your home and the third from the Sun. I’ve got water and life—aren’t I the fun one? What am I?': 'Earth', 'I live in the sky but fall to the ground. I’m cold and white and make no sound. What am I?': 'snow',
+    #            'I have a tail and a head, but no body. What am I?': 'coin', 'It has keys, but no locks. It has space, but no room. You can enter, but can’t go inside. What is it?': 'keyboard',
+     #            'What starts with T, ends with T, and has T inside it?': 'teapot' }
+    
+    
+
+#def random_number_generator():
+ #   for num in range(0,9):
+  #      num = random.random()
+   # return num        
+
 
 
 game_state = INIT_GAME_STATE.copy()
