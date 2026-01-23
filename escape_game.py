@@ -106,7 +106,7 @@ dresser = {
 }
 
 double_bed = {
-    "name": "dresser",
+    "name": "double bed",
     "type": "furniture",
 }
 
@@ -256,24 +256,36 @@ def examine_item(item_name):
     if(output is None):
         print("The item you requested is not found in the current room.")
     
-    if(next_room and input("Do you want to go to the next room?").strip() == 'yes'):
+    if(next_room):
+        
+        num = random_number_generator()
+        key_value = riddle(num)
+        input("Do you want to go to the next room? Enter 'yes' or 'no. ").strip() == 'yes'
+        input("This door is bound by ancient magic-solve the riddle, or remain forever inside : \n" + list(key_value.keys())[0]).strip() == list(key_value.values())[0]
+        
         play_room(next_room)
     else:
         play_room(current_room)
 
-#def riddle(num):
- #   ques_ans = {'I’m full of words, but I can’t speak. I’m full of knowledge, but I can’t think. What am I ': 'book', 'What has a neck but no head, and a body but no legs?': 'bottle', 
-  #              'What has cities but no houses, forests but no trees, and rivers but no water?': 'map', 'What has a thumb and four fingers but is not alive?': 'glove', 'What has teeth but cannot bite?': 'comb',
-   #             'I’m your home and the third from the Sun. I’ve got water and life—aren’t I the fun one? What am I?': 'Earth', 'I live in the sky but fall to the ground. I’m cold and white and make no sound. What am I?': 'snow',
-    #            'I have a tail and a head, but no body. What am I?': 'coin', 'It has keys, but no locks. It has space, but no room. You can enter, but can’t go inside. What is it?': 'keyboard',
-     #            'What starts with T, ends with T, and has T inside it?': 'teapot' }
+def riddle(num):
+
+    """For entering new room the player must solve riddle"""
+
+    ques_ans = {'I’m full of words, but I can’t speak. I’m full of knowledge, but I can’t think. What am I ?': 'book', 'What has a neck but no head, and a body but no legs? ': 'bottle', 
+                'What has cities but no houses, forests but no trees, and rivers but no water? ': 'map', 'What has a thumb and four fingers but is not alive? ': 'glove', 'What has teeth but cannot bite? ': 'comb',
+                'I’m your home and the third from the Sun. I’ve got water and life—aren’t I the fun one? What am I?': 'earth', 'I live in the sky but fall to the ground. I’m cold and white and make no sound. What am I?': 'snow',
+                'I have a tail and a head, but no body. What am I? ': 'coin', 'It has keys, but no locks. It has space, but no room. You can enter, but can’t go inside. What is it? ': 'keyboard',
+                 'What starts with T, ends with T, and has T inside it? ': 'teapot' }
+    key = list(ques_ans)[num]
+    #print(ques_ans[key])                
+    return {key:ques_ans[key]}
     
     
 
-#def random_number_generator():
- #   for num in range(0,9):
-  #      num = random.random()
-   # return num        
+def random_number_generator():
+        """Generates random number so it can select the random riddle from the list"""
+        num = random.randint(0,9)
+        return num        
 
 
 
