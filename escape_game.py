@@ -187,10 +187,12 @@ def play_room(room):
     game_state["current_room"] = room
     if(game_state["current_room"] == game_state["target_room"]):
         unlock_door_sound.play()
+        pygame.time.delay(1000)
         door_open_sound.play()
         pygame.time.delay(1000)
         win_victory_sound.play()
         print("Congrats! You escaped the room!")
+        input("\n--- THE END (Press Enter to close the game) ---")
     else:
         print("You are now in " + room["name"])
         intended_action = input("What would you like to do? Type 'explore' or 'examine' or 'inventory'?").strip()
