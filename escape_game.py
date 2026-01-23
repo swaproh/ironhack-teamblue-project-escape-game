@@ -1,4 +1,20 @@
 import random
+
+import pygame
+
+pygame.mixer.init()
+getkey_sound = pygame.mixer.Sound("sounds/getkey.wav")
+riddle_start_sound = pygame.mixer.Sound("sounds/riddle_start.wav")
+riddle_correct_sound = pygame.mixer.Sound("sounds/riddle_correct.wav")
+search_nothing_sound = pygame.mixer.Sound("sounds/search_nothing.wav")
+empty_inventory_sound = pygame.mixer.Sound("sounds/empty_inventory.wav")
+keys_inventory_sound = pygame.mixer.Sound("sounds/keys_inventory.wav")
+door_open_sound = pygame.mixer.Sound("sounds/door_open.wav")
+win_victory_sound = pygame.mixer.Sound("sounds/win_victory.wav")
+unlock_door_sound = pygame.mixer.Sound("sounds/unlock_door.wav")
+locked_door_sound = pygame.mixer.Sound("sounds/locked_door.wav")
+explore_sound = pygame.mixer.Sound("sounds/explore.wav")
+
 # define rooms and items
 
 couch = {
@@ -170,6 +186,10 @@ def play_room(room):
     """
     game_state["current_room"] = room
     if(game_state["current_room"] == game_state["target_room"]):
+        unlock_door_sound.play()
+        door_open_sound.play()
+        pygame.time.delay(1000)
+        win_victory_sound.play()
         print("Congrats! You escaped the room!")
     else:
         print("You are now in " + room["name"])
@@ -189,8 +209,10 @@ def play_room(room):
 
 def check_inventory():
     if len(game_state['keys_collected']) == 0:
+        empty_inventory_sound.play()
         print("Your pockets are empty!")
-    else:    
+    else:
+        keys_inventory_sound.play()    
         output_message = "You check your pockets and you find these keys: "
         print(output_message)
         for key in game_state['keys_collected']:
@@ -200,6 +222,7 @@ def explore_room(room):
     """
     Explore a room. List all items belonging to this room.
     """
+    explore_sound.play()
     explore_message = "You explore the room. This is " + room["name"] + ". You find "
     for item in object_relations[room["name"]]:
       explore_message += str(item["name"]) + ", "
@@ -239,16 +262,20 @@ def examine_item(item_name):
                     if(key["target"] == item):
                         have_key = True
                 if(have_key):
+                    unlock_door_sound.play()
                     output += "You unlock it with a key you have."
                     next_room = get_next_room_of_door(item, current_room)
                 else:
+                    locked_door_sound.play()
                     output += "It is locked but you don't have the key."
             else:
                 if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                     item_found = object_relations[item["name"]].pop()
                     game_state["keys_collected"].append(item_found)
+                    getkey_sound.play()
                     output += "You find " + item_found["name"] + "."
                 else:
+                    search_nothing_sound.play()
                     output += "There isn't anything interesting about it."
             print(output)
             break
@@ -256,14 +283,26 @@ def examine_item(item_name):
     if(output is None):
         print("The item you requested is not found in the current room.")
     
-    if(next_room):
-        
-        num = random_number_generator()
-        key_value = riddle(num)
-        input("Do you want to go to the next room? Enter 'yes' or 'no. ").strip() == 'yes'
-        input("This door is bound by ancient magic-solve the riddle, or remain forever inside : \n" + list(key_value.keys())[0]).strip() == list(key_value.values())[0]
-        
-        play_room(next_room)
+    if next_room:
+        answer = input("Do you want to go to the next room? Enter 'yes' or 'no': ").strip().lower()
+        if answer == "yes":
+            num = random_number_generator()
+            key_value = riddle(num)
+            
+            riddle_start_sound.play()
+            
+            print("This door is bound by ancient magic—solve the riddle, or remain forever inside:")
+            user_answer = input(list(key_value.keys())[0] + "\n").strip().lower()
+            
+            if user_answer == list(key_value.values())[0]:
+                riddle_correct_sound.play()
+                print("✨ The magic fades away. The door opens!")
+                play_room(next_room)
+            else:
+                print("❌ Wrong answer. The door remains sealed.")
+                play_room(current_room)
+        else:
+            play_room(current_room)
     else:
         play_room(current_room)
 
