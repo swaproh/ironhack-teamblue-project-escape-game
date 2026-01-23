@@ -1,3 +1,4 @@
+import random
 # define rooms and items
 
 couch = {
@@ -10,10 +11,43 @@ door_a = {
     "type": "door",
 }
 
+door_b = {
+    "name": "door b",
+    "type": "door",
+}
+
+door_c = {
+    "name": "door c",
+    "type": "door",
+}
+
+door_d = {
+    "name": "door d",
+    "type": "door",
+}
+
 key_a = {
     "name": "key for door a",
     "type": "key",
     "target": door_a,
+}
+
+key_b = {
+    "name": "key for door b",
+    "type": "key",
+    "target": door_b,
+}
+
+key_c = {
+    "name": "key for door c",
+    "type": "key",
+    "target": door_c,
+}
+
+key_d = {
+    "name": "key for door d",
+    "type": "key",
+    "target": door_d,
 }
 
 piano = {
@@ -26,27 +60,88 @@ game_room = {
     "type": "room",
 }
 
+living_room = {
+    "name": "living room",
+    "type": "room",
+}
+
+bedroom_1 = {
+    "name": "bedroom 1",
+    "type": "room",
+}
+
+queen_bed = {
+    "name": "queen bed",
+    "type": "furniture",
+}
+
+dining_table = {
+    "name": "dining table",
+    "type": "furniture",
+}
+
+wardrobe = {
+    "name": "wardrobe",
+    "type": "furniture",
+}
+
+carpet = {
+    "name": "carpet",
+    "type": "furnishing",
+}
+
+floor_lamp = {
+    "name": "floor lamp",
+    "type": "furnishing",
+}
+
+bedroom_2 = {
+    "name": "bedroom 2",
+    "type": "room",
+}
+
+dresser = {
+    "name": "dresser",
+    "type": "furniture",
+}
+
+double_bed = {
+    "name": "dresser",
+    "type": "furniture",
+}
+
+
 outside = {
   "name": "outside"
 }
 
-all_rooms = [game_room, outside]
+all_rooms = [game_room, outside, bedroom_1, bedroom_2, living_room]
 
-all_doors = [door_a]
+all_doors = [door_a, door_b, door_c, door_d]
 
 # define which items/rooms are related
 
 object_relations = {
     "game room": [couch, piano, door_a],
     "piano": [key_a],
-    "outside": [door_a],
-    "door a": [game_room, outside]
+    "bedroom 1": [queen_bed, wardrobe, carpet, floor_lamp, door_a, door_b, door_c],
+    "bedroom 2": [double_bed, dresser, door_b],
+    "living room": [dining_table, door_c, door_d],
+    "queen bed": [key_b],
+    "double bed": [key_c],
+    "dresser": [key_d],
+    "outside": [],
+    "door a": [game_room, bedroom_1],
+    "door b": [bedroom_1, bedroom_2],
+    "door c": [bedroom_1, living_room],
+    "door d": [living_room, outside],
+
 }
 
 # define game state. Do not directly change this dict. 
 # Instead, when a new game starts, make a copy of this
 # dict and use the copy to store gameplay state. This 
-# way you can replay the game multiple times.
+# way you can replay the game multiple times. 
 
 INIT_GAME_STATE = {
     "current_room": game_room,
@@ -78,16 +173,28 @@ def play_room(room):
         print("Congrats! You escaped the room!")
     else:
         print("You are now in " + room["name"])
-        intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
+        intended_action = input("What would you like to do? Type 'explore' or 'examine' or 'inventory'?").strip()
         if intended_action == "explore":
             explore_room(room)
             play_room(room)
         elif intended_action == "examine":
             examine_item(input("What would you like to examine?").strip())
+        elif intended_action == "inventory":
+            check_inventory()
+            play_room(room)    
         else:
             print("Not sure what you mean. Type 'explore' or 'examine'.")
             play_room(room)
         linebreak()
+
+def check_inventory():
+    if len(game_state['keys_collected']) == 0:
+        print("Your pockets are empty!")
+    else:    
+        output_message = "You check your pockets and you find these keys: "
+        print(output_message)
+        for key in game_state['keys_collected']:
+            print(key["name"])        
 
 def explore_room(room):
     """
@@ -149,10 +256,25 @@ def examine_item(item_name):
     if(output is None):
         print("The item you requested is not found in the current room.")
     
-    if(next_room and input("Do you want to go to the next room? Ener 'yes' or 'no'").strip() == 'yes'):
+    if(next_room and input("Do you want to go to the next room?").strip() == 'yes'):
         play_room(next_room)
     else:
         play_room(current_room)
+
+#def riddle(num):
+ #   ques_ans = {'I’m full of words, but I can’t speak. I’m full of knowledge, but I can’t think. What am I ': 'book', 'What has a neck but no head, and a body but no legs?': 'bottle', 
+  #              'What has cities but no houses, forests but no trees, and rivers but no water?': 'map', 'What has a thumb and four fingers but is not alive?': 'glove', 'What has teeth but cannot bite?': 'comb',
+   #             'I’m your home and the third from the Sun. I’ve got water and life—aren’t I the fun one? What am I?': 'Earth', 'I live in the sky but fall to the ground. I’m cold and white and make no sound. What am I?': 'snow',
+    #            'I have a tail and a head, but no body. What am I?': 'coin', 'It has keys, but no locks. It has space, but no room. You can enter, but can’t go inside. What is it?': 'keyboard',
+     #            'What starts with T, ends with T, and has T inside it?': 'teapot' }
+    
+    
+
+#def random_number_generator():
+ #   for num in range(0,9):
+  #      num = random.random()
+   # return num        
+
 
 
 game_state = INIT_GAME_STATE.copy()
